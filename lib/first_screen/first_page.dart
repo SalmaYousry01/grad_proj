@@ -24,10 +24,11 @@ class _FirstpageState extends State<Firstpage> {
           child: Padding(
         padding: const EdgeInsets.all(100),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
               child: Text(
-                'Sign Up as',
+                'Join as',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   color: Colors.white,

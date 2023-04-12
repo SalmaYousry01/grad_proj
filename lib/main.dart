@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grad_project/Home_layout/calender/calender.dart';
-import 'package:grad_project/dr_profile.dart';
+import 'package:grad_project/Profile/clinicProfile.dart';
 import 'create_account/patient_signup.dart';
 import 'package:provider/provider.dart';
 import 'package:grad_project/create_account/doctor_signup.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return MaterialApp(
-      initialRoute: ProfilePage.routeName,
+      initialRoute: Firstpage.routeName,
       routes: {
         PatientSignup.routeName: (context) => PatientSignup(),
         DoctorSignup.routeName: (context) => DoctorSignup(),
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         navv.routeName: (context) => navv(),
         PatientLogin.routeName: (context) => PatientLogin(),
         DoctortLogin.routeName: (context) => DoctortLogin(),
-        ProfilePage.routeName:(c)=>ProfilePage()
+        ClinicProfile.routeName:(c)=>ClinicProfile()
       },
       debugShowCheckedModeBanner: false,
     );

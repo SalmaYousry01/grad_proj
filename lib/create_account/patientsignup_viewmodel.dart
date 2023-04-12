@@ -8,13 +8,11 @@ import 'package:grad_project/create_account/patient_nav.dart';
 import 'package:grad_project/models/my_patient.dart';
 import '../basenavigator.dart';
 
-class patientsignupViewModel extends BaseViewModel< PatientAccountNavigator>{
-  var auth =FirebaseAuth.instance;
+class patientsignupViewModel extends BaseViewModel<PatientAccountNavigator> {
+  var auth = FirebaseAuth.instance;
 
-
-  void signupViewModel(String email,String password,String fullname,String username,String phonenumber)async{
-
-
+  void signupViewModel(String email, String password, String fullname,
+      String username, String phonenumber) async {
     try {
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
@@ -26,11 +24,9 @@ class patientsignupViewModel extends BaseViewModel< PatientAccountNavigator>{
           username: username,
           phonenumber: phonenumber,
           email: email);
-      DatabaseUtilspatient.AddUserToFirestore(patient).then((value){
-
+      DatabaseUtilspatient.AddUserToFirestore(patient).then((value) {
         navigator!.goToHome(patient);
         return;
-
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == FirebaseError.weakPassword) {
@@ -42,5 +38,4 @@ class patientsignupViewModel extends BaseViewModel< PatientAccountNavigator>{
       print(e);
     }
   }
-
 }

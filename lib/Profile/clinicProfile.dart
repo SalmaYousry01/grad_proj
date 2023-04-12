@@ -1,56 +1,82 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:grad_project/create_account/doctor_signup.dart';
+import 'package:grad_project/Profile/clinicProfile_navigator.dart';
+import 'package:grad_project/basenavigator.dart';
+import 'package:grad_project/Profile/clinic_viewmodel.dart';
+import 'package:grad_project/login/doctor_login.dart';
+import 'package:provider/provider.dart';
 
-class ProfilePage extends StatefulWidget {
-  static const String routeName = "Dr_profile";
+import '../models/my_doctor.dart';
+
+class ClinicProfile extends StatefulWidget {
+  static const String routeName = "Clinicprofile";
 
   @override
-  MapScreenState createState() => MapScreenState();
+  ProfileScreenState createState() => ProfileScreenState();
 }
 
-class MapScreenState extends State<ProfilePage>
-    with SingleTickerProviderStateMixin {
+class ProfileScreenState extends BaseView<ClinicProfile, ClinicViewModel>
+    with SingleTickerProviderStateMixin
+    implements clinicProfileNavigator {
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
+  var addressController = TextEditingController();
+  var phoneController = TextEditingController();
+  var startTimeController = TextEditingController();
+  var endTimeController = TextEditingController();
+  var feesController = TextEditingController();
+  var aboutController = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    viewModel.navigator = this;
+    GetDataFromDatabase();
   }
 
-  TimeOfDay startTime = TimeOfDay.now();
-  TimeOfDay endTime = TimeOfDay.now();
+  // TimeOfDay startTime = TimeOfDay.now();
+  // TimeOfDay endTime = TimeOfDay.now();
+  String? name = '';
+  String? field = '';
+
+  Future GetDataFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection(DoctorDataBase.COLLECTION_NAME)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          name = snapshot.data()!["fullName"];
+          field = snapshot.data()!["Field"];
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60),
             child: AppBar(
-              elevation: 0.0,
-              bottomOpacity: 0.0,
-              backgroundColor: Colors.white,
-              leading: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      Navigator.pop(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DoctorSignup()));
-                    });
-                  },
-                  child: Icon(
-                    Icons.arrow_back,
+                elevation: 0.0,
+                bottomOpacity: 0.0,
+                backgroundColor: Colors.white,
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.pushNamed(context, DoctortLogin.routeName);
+                    },
+                    icon: Icon(Icons.arrow_back_outlined),
                     color: Colors.black,
                   ),
-                ),
-              ),
-            )),
+                ))),
         body: new Container(
           color: Colors.white,
           child: new ListView(
@@ -92,12 +118,10 @@ class MapScreenState extends State<ProfilePage>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   new CircleAvatar(
-                                    backgroundColor:  Color(0xFF2C698D),
+                                    backgroundColor: Color(0xFF2C698D),
                                     radius: 25.0,
-                                    child: new Icon(
-                                      Icons.camera_alt,
-                                        color: Colors.white
-                                    ),
+                                    child: new Icon(Icons.camera_alt,
+                                        color: Colors.white),
                                   )
                                 ],
                               )),
@@ -118,14 +142,14 @@ class MapScreenState extends State<ProfilePage>
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "Dr.Hani Mohamed",
+                                  "Dr : " + name!,
                                   style: TextStyle(fontSize: 17),
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "Field:",
+                                  "Field: " + field!,
                                   style: TextStyle(fontSize: 17),
                                 ),
                               ),
@@ -188,15 +212,13 @@ class MapScreenState extends State<ProfilePage>
                                         'Address',
                                         style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.bold
-                                        ),
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ],
                               )),
-                    SizedBox(
-                      height: 7),
+                          SizedBox(height: 7),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
@@ -205,17 +227,20 @@ class MapScreenState extends State<ProfilePage>
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      controller: addressController,
                                       keyboardType: TextInputType.name,
                                       decoration: InputDecoration(
                                         hintText: 'Enter Your Clinic Address',
                                         border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(7.69),
-                                            borderSide:
-                                            BorderSide(color: Color(0xFF2C698D))),
+                                            borderRadius:
+                                                BorderRadius.circular(7.69),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF2C698D))),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(7.69),
-                                            borderSide:
-                                            BorderSide(color: Color(0xFF2C698D))),
+                                            borderRadius:
+                                                BorderRadius.circular(7.69),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF2C698D))),
                                       ),
                                       enabled: !_status,
                                       autofocus: !_status,
@@ -237,15 +262,13 @@ class MapScreenState extends State<ProfilePage>
                                         'Phone',
                                         style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.bold
-                                        ),
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ],
                               )),
-                          SizedBox(
-                              height: 7),
+                          SizedBox(height: 7),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
@@ -254,16 +277,20 @@ class MapScreenState extends State<ProfilePage>
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller: phoneController,
                                       decoration: InputDecoration(
                                         hintText: 'Enter Clinic Number',
                                         border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(7.69),
-                                            borderSide:
-                                            BorderSide(color: Color(0xFF2C698D))),
+                                            borderRadius:
+                                                BorderRadius.circular(7.69),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF2C698D))),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(7.69),
-                                            borderSide:
-                                            BorderSide(color: Color(0xFF2C698D))),
+                                            borderRadius:
+                                                BorderRadius.circular(7.69),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF2C698D))),
                                       ),
                                       enabled: !_status,
                                     ),
@@ -284,36 +311,91 @@ class MapScreenState extends State<ProfilePage>
                                         'Availability',
                                         style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.bold
-                                        ),
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
                                 ],
                               )),
+                          SizedBox(height: 7),
                           Padding(
-                            padding: const EdgeInsets.only(top:20,left: 50.0),
-                            child: ListView(
-                              shrinkWrap: true,
-                              children: [
-                                _buildTimePick("Start", true, startTime, (x) {
-                                  setState(() {
-                                    startTime = x;
-                                    print("The picked time is: $x");
-                                    enabled: !_status;
-                                  });
-                                }),
-                                const SizedBox(height: 10),
-                                _buildTimePick("End", true, endTime, (x) {
-                                  setState(() {
-                                    endTime = x;
-                                    print("The picked time is: $x");
-                                    enabled: !_status;
-                                  });
-                                }),
-                              ],
-                            ),
-                          ),
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 10.0),
+                                      child: new TextField(
+                                        controller: startTimeController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Start Time',
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(7.69),
+                                              borderSide: BorderSide(
+                                                  color: Color(0xFF2C698D))),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(7.69),
+                                              borderSide: BorderSide(
+                                                  color: Color(0xFF2C698D))),
+                                        ),
+                                        enabled: !_status,
+                                      ),
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Flexible(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 10.0),
+                                      child: new TextField(
+                                        controller: endTimeController,
+                                        decoration: InputDecoration(
+                                          hintText: 'End Time',
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(7.69),
+                                              borderSide: BorderSide(
+                                                  color: Color(0xFF2C698D))),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(7.69),
+                                              borderSide: BorderSide(
+                                                  color: Color(0xFF2C698D))),
+                                        ),
+                                        enabled: !_status,
+                                      ),
+                                    ),
+                                    flex: 2,
+                                  ),
+                                ],
+                              )),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top:20,left: 50.0),
+                          //   child: ListView(
+                          //     shrinkWrap: true,
+                          //     children: [
+                          //       _buildTimePick("Start", true, startTime, (x) {
+                          //         setState(() {
+                          //           startTime = x;
+                          //           print("The picked time is: $x");
+                          //           enabled: !_status;
+                          //         });
+                          //       }),
+                          //       const SizedBox(height: 10),
+                          //       _buildTimePick("End", true, endTime, (x) {
+                          //         setState(() {
+                          //           endTime = x;
+                          //           print("The picked time is: $x");
+                          //           enabled: !_status;
+                          //         });
+                          //       }),
+                          //     ],
+                          //   ),
+                          // ),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
@@ -327,16 +409,14 @@ class MapScreenState extends State<ProfilePage>
                                         'Fees',
                                         style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.bold
-                                        ),
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     flex: 2,
                                   ),
                                 ],
                               )),
-                          SizedBox(
-                              height: 7),
+                          SizedBox(height: 7),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
@@ -348,16 +428,19 @@ class MapScreenState extends State<ProfilePage>
                                     child: Padding(
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: new TextField(
+                                        controller: feesController,
                                         decoration: InputDecoration(
                                           hintText: 'Enter Your Fees',
                                           border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(7.69),
-                                              borderSide:
-                                              BorderSide(color: Color(0xFF2C698D))),
+                                              borderRadius:
+                                                  BorderRadius.circular(7.69),
+                                              borderSide: BorderSide(
+                                                  color: Color(0xFF2C698D))),
                                           enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(7.69),
-                                              borderSide:
-                                              BorderSide(color: Color(0xFF2C698D))),
+                                              borderRadius:
+                                                  BorderRadius.circular(7.69),
+                                              borderSide: BorderSide(
+                                                  color: Color(0xFF2C698D))),
                                         ),
                                         enabled: !_status,
                                       ),
@@ -394,16 +477,19 @@ class MapScreenState extends State<ProfilePage>
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      controller: aboutController,
                                       decoration: InputDecoration(
                                         hintText: 'About Your Clinic',
                                         border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(7.69),
-                                            borderSide:
-                                            BorderSide(color: Color(0xFF2C698D))),
+                                            borderRadius:
+                                                BorderRadius.circular(7.69),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF2C698D))),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(7.69),
-                                            borderSide:
-                                            BorderSide(color: Color(0xFF2C698D))),
+                                            borderRadius:
+                                                BorderRadius.circular(7.69),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF2C698D))),
                                       ),
                                       enabled: !_status,
                                     ),
@@ -447,6 +533,7 @@ class MapScreenState extends State<ProfilePage>
                     ),
                     child: new Text("Save"),
                     onPressed: () {
+                      ClinicViewModel();
                       setState(() {
                         _status = true;
                         FocusScope.of(context).requestFocus(new FocusNode());
@@ -501,41 +588,46 @@ class MapScreenState extends State<ProfilePage>
     );
   }
 
-  Future selectedTime(BuildContext context, bool ifPickedTime,
-      TimeOfDay initialTime, Function(TimeOfDay) onTimePicked) async {
-    var _pickedTime =
-        await showTimePicker(context: context, initialTime: initialTime);
-    if (_pickedTime != null) {
-      onTimePicked(_pickedTime);
-    }
+  @override
+  ClinicViewModel initViewModel() {
+    return ClinicViewModel();
   }
 
-  Widget _buildTimePick(String title, bool ifPickedTime, TimeOfDay currentTime,
-      Function(TimeOfDay) onTimePicked) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 80,
-          child: Text(
-            title,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          decoration: BoxDecoration(
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: GestureDetector(
-            child: Text(
-              currentTime.format(context),
-            ),
-            onTap: () {
-              selectedTime(context, ifPickedTime, currentTime, onTimePicked);
-            },
-          ),
-        ),
-      ],
-    );
-  }
+// Future selectedTime(BuildContext context, bool ifPickedTime,
+//     TimeOfDay initialTime, Function(TimeOfDay) onTimePicked) async {
+//   var _pickedTime =
+//       await showTimePicker(context: context, initialTime: initialTime);
+//   if (_pickedTime != null) {
+//     onTimePicked(_pickedTime);
+//   }
+// }
+
+// Widget _buildTimePick(String title, bool ifPickedTime, TimeOfDay currentTime,
+//     Function(TimeOfDay) onTimePicked) {
+//   return Row(
+//     children: [
+//       SizedBox(
+//         width: 80,
+//         child: Text(
+//           title,
+//         ),
+//       ),
+//       Container(
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+//         decoration: BoxDecoration(
+//           border: Border.all(),
+//           borderRadius: BorderRadius.circular(20),
+//         ),
+//         child: GestureDetector(
+//           child: Text(
+//             currentTime.format(context),
+//           ),
+//           onTap: () {
+//             selectedTime(context, ifPickedTime, currentTime, onTimePicked);
+//           },
+//         ),
+//       ),
+//     ],
+//   );
+// }
 }

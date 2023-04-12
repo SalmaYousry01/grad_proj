@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:grad_project/basenavigator.dart';
+import 'package:grad_project/create_account/doctor_nav.dart';
+import 'package:grad_project/models/my_doctor.dart';
 import 'package:provider/provider.dart';
+import '../Profile/clinicProfile.dart';
 import '../login/doctor_login.dart';
+import '../myprovider.dart';
 import 'doctor_signup_viewmodel.dart';
 
 class DoctorSignup extends StatefulWidget {
@@ -12,24 +17,23 @@ class DoctorSignup extends StatefulWidget {
   State<DoctorSignup> createState() => _DoctorSignupState();
 }
 
-class _DoctorSignupState extends State<DoctorSignup> {
+class _DoctorSignupState extends BaseView<DoctorSignup, DoctorSignupViewModel>
+    implements DoctorAccountNavigator {
   var email, idNumber, password;
-  bool passwordVisible=false;
-  bool confirmPasswordVisible=false;
+  bool passwordVisible = false;
+  bool confirmPasswordVisible = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var confirmPasswordController = TextEditingController();
   var fullnamecontroller = TextEditingController();
+  var Fieldcontroller = TextEditingController();
   var IDcontroller = TextEditingController();
-
-
 
   var Mobilenumbercontroller = TextEditingController();
   DoctorSignupViewModel viewModel = DoctorSignupViewModel();
 
   @override
-
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => viewModel,
@@ -51,7 +55,8 @@ class _DoctorSignupState extends State<DoctorSignup> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Center(child: Image.asset('assets/images/Group 3.png')),
+                      children: [
+                        Center(child: Image.asset('assets/images/Group 3.png')),
                         SizedBox(
                           height: 0,
                         ),
@@ -83,7 +88,7 @@ class _DoctorSignupState extends State<DoctorSignup> {
                             }
                             return null;
                           }),
-                          controller:fullnamecontroller,
+                          controller: fullnamecontroller,
                           onFieldSubmitted: (String value) {
                             print(value);
                           },
@@ -91,15 +96,15 @@ class _DoctorSignupState extends State<DoctorSignup> {
                           decoration: InputDecoration(
                             hintText: 'Full Name',
                             prefixIcon:
-                            Icon(Icons.person, color: Color(0xFF2C698D)),
+                                Icon(Icons.person, color: Color(0xFF2C698D)),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                           ),
                         ),
                         SizedBox(
@@ -132,20 +137,20 @@ class _DoctorSignupState extends State<DoctorSignup> {
                             }
                             return null;
                           },
-                          controller:IDcontroller,
+                          controller: IDcontroller,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                             hintText: 'ID number',
                             prefixIcon:
-                            Icon(Icons.person, color: Color(0xFF2C698D)),
+                                Icon(Icons.person, color: Color(0xFF2C698D)),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                           ),
                         ),
                         SizedBox(
@@ -163,7 +168,6 @@ class _DoctorSignupState extends State<DoctorSignup> {
                           height: 3,
                         ),
                         TextFormField(
-
                           onFieldSubmitted: (String value) {
                             print(value);
                           },
@@ -172,15 +176,49 @@ class _DoctorSignupState extends State<DoctorSignup> {
                           decoration: InputDecoration(
                             hintText: 'Mobile Number',
                             prefixIcon:
-                            Icon(Icons.phone, color: Color(0xFF2C698D)),
+                                Icon(Icons.phone, color: Color(0xFF2C698D)),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        //phone number
+                        Text(
+                          'Field',
+                          style: TextStyle(
+                            color: Color(0xFF2C698D),
+                            fontSize: 13,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        TextFormField(
+                          onFieldSubmitted: (String value) {
+                            print(value);
+                          },
+                          controller: Fieldcontroller,
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            hintText: 'Field',
+                            prefixIcon:
+                                Icon(Icons.work, color: Color(0xFF2C698D)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7.69),
+                                borderSide:
+                                    BorderSide(color: Color(0xFF2C698D))),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7.69),
+                                borderSide:
+                                    BorderSide(color: Color(0xFF2C698D))),
                           ),
                         ),
                         SizedBox(
@@ -212,7 +250,7 @@ class _DoctorSignupState extends State<DoctorSignup> {
                               return "Please Enter Email";
                             }
                             final bool emailValid = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                 .hasMatch(text);
                             if (!emailValid) {
                               return "please Enter Valid email";
@@ -230,11 +268,11 @@ class _DoctorSignupState extends State<DoctorSignup> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                           ),
                         ),
                         SizedBox(
@@ -276,7 +314,7 @@ class _DoctorSignupState extends State<DoctorSignup> {
                           decoration: InputDecoration(
                             hintText: 'Password',
                             prefixIcon:
-                            Icon(Icons.lock, color: Color(0xFF2C698D)),
+                                Icon(Icons.lock, color: Color(0xFF2C698D)),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 passwordVisible
@@ -293,11 +331,11 @@ class _DoctorSignupState extends State<DoctorSignup> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                           ),
                         ),
                         SizedBox(
@@ -330,7 +368,7 @@ class _DoctorSignupState extends State<DoctorSignup> {
                           decoration: InputDecoration(
                             hintText: 'Confirm Password',
                             prefixIcon:
-                            Icon(Icons.lock, color: Color(0xFF2C698D)),
+                                Icon(Icons.lock, color: Color(0xFF2C698D)),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 confirmPasswordVisible
@@ -340,18 +378,19 @@ class _DoctorSignupState extends State<DoctorSignup> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                  confirmPasswordVisible = !confirmPasswordVisible;
+                                  confirmPasswordVisible =
+                                      !confirmPasswordVisible;
                                 });
                               },
                             ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(7.69),
                                 borderSide:
-                                BorderSide(color: Color(0xFF2C698D))),
+                                    BorderSide(color: Color(0xFF2C698D))),
                           ),
                         ),
                         SizedBox(
@@ -359,9 +398,9 @@ class _DoctorSignupState extends State<DoctorSignup> {
                         ),
                         Container(
                             width: double.infinity,
-                            height:  46.13,
+                            height: 46.13,
                             child: ElevatedButton(
-                                style:ElevatedButton.styleFrom(
+                                style: ElevatedButton.styleFrom(
                                   backgroundColor: Color(0xFF2C698D),
                                 ),
                                 onPressed: () {
@@ -390,8 +429,7 @@ class _DoctorSignupState extends State<DoctorSignup> {
                           ],
                         )
                       ],
-                    )
-                ),
+                    )),
               ),
             ),
           ),
@@ -403,7 +441,31 @@ class _DoctorSignupState extends State<DoctorSignup> {
   void DoctorSignupValidation() async {
     if (formKey.currentState!.validate()) {
       viewModel.doctorSignupWithFirebaseAuth(
-          emailController.text, passwordController.text,fullnamecontroller.text,IDcontroller.text,Mobilenumbercontroller.text);
+          emailController.text,
+          passwordController.text,
+          fullnamecontroller.text,
+          IDcontroller.text,
+          Mobilenumbercontroller.text,
+          Fieldcontroller.text);
     }
+  }
+
+  @override
+  void goToProfilePage(DoctorDataBase doctor) {
+    // go to home screen
+    Provider.of<MyProvider>(context, listen: false);
+    Navigator.pushReplacementNamed(context, ClinicProfile.routeName);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    viewModel.navigator = this;
+  }
+
+  @override
+  DoctorSignupViewModel initViewModel() {
+    return DoctorSignupViewModel();
   }
 }

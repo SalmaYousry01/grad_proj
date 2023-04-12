@@ -18,54 +18,57 @@ class _hometaskState extends State<home> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Scaffold(
-        appBar: PreferredSize(child: AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      toolbarHeight: 185,
-      leading: IconButton(
-        onPressed: () {
-          FirebaseAuth.instance.signOut();
-          Navigator.pushNamed(context, PatientLogin.routeName);
-        },
-        icon: Icon(Icons.arrow_back_outlined),
-        color: Colors.black,
-      ),
-      flexibleSpace: ClipRRect(
-        child: Container(
-          width: 300,
-          height: 250,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
+        appBar: PreferredSize(
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              toolbarHeight: 185,
+              leading: IconButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushNamed(context, PatientLogin.routeName);
+                },
+                icon: Icon(Icons.arrow_back_outlined),
+                color: Colors.black,
+              ),
+              flexibleSpace: ClipRRect(
+                child: Container(
+                  width: 300,
+                  height: 250,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
                     "assets/images/Group 123.png",
                   ))),
-        ),
-      ),
-      title: Padding(
-        padding: const EdgeInsets.only(left: 30.0),
-        child: Text(
-          "Hi username",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-      ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 40.0, bottom: 50, top: 50),
-          child: Container(
-            width: 90,
-            height: 40,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                    "assets/images/user.png",
-                  )),
-              borderRadius: BorderRadius.all(Radius.circular(80)),
-              color: Colors.white,
+                ),
+              ),
+              title: Padding(
+                padding: const EdgeInsets.only(left: 30.0),
+                child: Text(
+                  "Hi username",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+              actions: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(right: 40.0, bottom: 50, top: 50),
+                  child: Container(
+                    width: 90,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                        "assets/images/user.png",
+                      )),
+                      borderRadius: BorderRadius.all(Radius.circular(80)),
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
             ),
-          ),
-        )
-      ],
-    ), preferredSize: Size.fromHeight(138)),
+            preferredSize: Size.fromHeight(138)),
         body: Padding(
           padding:
               const EdgeInsets.only(top: 30, right: 20, left: 30, bottom: 20),
@@ -93,7 +96,8 @@ class _hometaskState extends State<home> {
                         child: Container(
                           decoration: new BoxDecoration(
                             image: new DecorationImage(
-                              image: new AssetImage("assets/images/doctor.png"),
+                              image:
+                                  new AssetImage("assets/images/doctor .png"),
                             ),
                           ),
                         ),
