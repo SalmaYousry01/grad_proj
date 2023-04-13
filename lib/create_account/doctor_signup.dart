@@ -7,6 +7,7 @@ import 'package:grad_project/models/my_doctor.dart';
 import 'package:provider/provider.dart';
 import '../Profile/clinicProfile.dart';
 import '../login/doctor_login.dart';
+import '../models/field_category.dart';
 import '../myprovider.dart';
 import 'doctor_signup_viewmodel.dart';
 
@@ -32,6 +33,9 @@ class _DoctorSignupState extends BaseView<DoctorSignup, DoctorSignupViewModel>
 
   var Mobilenumbercontroller = TextEditingController();
   DoctorSignupViewModel viewModel = DoctorSignupViewModel();
+
+  var fieldCategories = FieldCategory.getCategories();
+  late FieldCategory selectedField;
 
   @override
   Widget build(BuildContext context) {
@@ -201,6 +205,37 @@ class _DoctorSignupState extends BaseView<DoctorSignup, DoctorSignupViewModel>
                         SizedBox(
                           height: 3,
                         ),
+                        Container(
+                          child: DropdownButton<FieldCategory>(
+                            value: selectedField,
+                            items: fieldCategories
+                                .map((cat) => DropdownMenuItem<FieldCategory>(
+                                      value: cat,
+                                      child: Row(
+                                        children: [Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(cat.name),
+                                        )],
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: (category) {
+                              if (category == null) {
+                                return;
+                              } else {
+                                selectedField = category;
+                              }
+                              setState(() {});
+                            },
+                          ),
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide( style: BorderStyle.solid, color: Color(0xFF2C698D)),
+                              borderRadius: BorderRadius.all(Radius.circular(7.69)),
+                        ),),),
+                        SizedBox(
+                          height: 3,
+                        ),
                         TextFormField(
                           onFieldSubmitted: (String value) {
                             print(value);
@@ -208,7 +243,7 @@ class _DoctorSignupState extends BaseView<DoctorSignup, DoctorSignupViewModel>
                           controller: Fieldcontroller,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
-                            hintText: 'Field',
+                            hintText: selectedField.name,
                             prefixIcon:
                                 Icon(Icons.work, color: Color(0xFF2C698D)),
                             border: OutlineInputBorder(
@@ -224,6 +259,7 @@ class _DoctorSignupState extends BaseView<DoctorSignup, DoctorSignupViewModel>
                         SizedBox(
                           height: 3,
                         ),
+
                         //email
                         Text(
                           'Email Address',
@@ -462,6 +498,7 @@ class _DoctorSignupState extends BaseView<DoctorSignup, DoctorSignupViewModel>
     // TODO: implement initState
     super.initState();
     viewModel.navigator = this;
+    selectedField = fieldCategories[0];
   }
 
   @override
