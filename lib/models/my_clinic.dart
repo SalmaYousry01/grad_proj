@@ -1,5 +1,5 @@
 class MyClinic {
-  static const String CLINIC_PROFILE = "ClinicProfile";
+  static const String CLINIC_PROFILE = "Clinic";
   String? id;
   String address;
   String phoneNumber;
